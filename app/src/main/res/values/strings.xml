@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">یکاری پیک</string>
+    <string name="pick_photo">انتخاب عکس</string>
+    <string name="share_via">ارسال با…</string>
+    <string name="press_back_again">برای خروج دوباره «برگشت» را بزن</string>
+    <string name="no_app_for_link">برنامه‌ای برای باز کردن این لینک پیدا نشد</string>
+    <string name="channel_general">اعلان‌های عمومی</string>
+    <string name="channel_general_desc">پیام مشتری، تسویه و اطلاعیه‌ها</string>
+    <string name="channel_offers">پیشنهاد مأموریت</string>
+    <string name="channel_offers_desc">پیشنهاد تازه وقتی اپ باز نیست؛ فقط چند ثانیه فرصت پذیرش دارد</string>
+    <string name="channel_tracking">وضعیت آنلاین</string>
+    <string name="channel_tracking_desc">اعلان ثابت تا وقتی آنلاین هستی</string>
+    <string name="tracking_title">آنلاین هستی</string>
+    <string name="tracking_body">موقعیتت برای دریافت مأموریت‌های نزدیک به‌روز می‌شود</string>
+    <string name="offer_title">پیشنهاد مأموریت تازه</string>
+    <string name="offer_body">برای دیدن جزئیات و پذیرش بزن</string>
+    <string name="offer_body_left">برای دیدن جزئیات و پذیرش بزن — %1$s ثانیه فرصت</string>
+</resources>

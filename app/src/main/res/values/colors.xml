@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- هم‌رنگ توکن‌های global.css دیزاین‌سیستم (surface / brand) -->
+    <color name="surface">#FFFFFF</color>
+    <color name="brand">#0D3B4C</color>
+    <!-- آیکون پیک برعکس مشتری: لوگوی سفید روی brand، تا روی گوشی از هم جدا باشند -->
+    <color name="logo">#FFFFFF</color>
+    <color name="icon_bg">#0D3B4C</color>
+    <color name="splash_logo">#0878A0</color>
+</resources>

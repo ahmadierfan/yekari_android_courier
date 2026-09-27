@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- لوگوی یکاری (public/logo.svg دیزاین‌سیستم) در جعبهٔ ۱۰۸dp آیکون تطبیقی -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.11613"
+        android:scaleY="0.11613"
+        android:translateX="-5.4596"
+        android:translateY="-5.4596">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="m494.07 734.98l16.93-28.2 235.42-407.42c0 0 5.71-9.3 0.33-15.74-5.39-6.44-9.3-7.99-15.34-7.99-6.03 0-11.33 7.34-11.33 7.34 0 0-26.88 50.4-97.74 100.67-70.85 50.28-141.44 50.02-172.96 50.54-31.52 0.52-102.63-11.46-142.48-32.04 0 0-13.81-8.35-19.67-7.2-5.86 1.14-16.56 5.6-12.48 18.59 4.07 12.99 11.08 22.42 19.49 36.05 8.4 13.63 169.41 290.42 169.41 290.42 0 0 16.25 21.81 30.42-5.02z" />
+    </group>
+</vector>

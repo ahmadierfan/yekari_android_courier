@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity android:name="ir.yekari.shell.MainActivity" android:exported="true">
+            <!-- App Links: لینک https دامنهٔ اپ مستقیم در اپ باز می‌شود.
+                 برای تأیید، فایل /.well-known/assetlinks.json باید روی همین دامنه باشد (README). -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="${appHost}" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

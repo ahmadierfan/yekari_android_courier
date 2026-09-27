@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>اتصال برقرار نیست</title>
+<style>
+  :root { --bg:#F5F7F9; --surface:#FFFFFF; --fg:#0B1F27; --muted:#5B6B73; --brand:#0D3B4C; --brand-fg:#FFFFFF; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#04151C; --surface:#07222C; --fg:#E6EEF1; --muted:#8FA3AB; --brand:#77B0C4; --brand-fg:#04151C; }
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; margin:0; }
+  body { background:var(--bg); color:var(--fg); font-family:Vazirmatn, "Noto Sans Arabic", system-ui, sans-serif;
+         display:flex; align-items:center; justify-content:center; padding:24px; }
+  .card { background:var(--surface); border-radius:24px; padding:32px 24px; max-width:360px; width:100%; text-align:center;
+          animation:rise .5s cubic-bezier(.16,1,.3,1) backwards; }
+  .dot { width:64px; height:64px; margin:0 auto 20px; border-radius:50%; background:var(--bg); display:grid; place-items:center; }
+  .dot svg { width:30px; height:30px; stroke:var(--muted); }
+  h1 { font-size:18px; margin:0 0 8px; }
+  p { font-size:14px; line-height:1.9; color:var(--muted); margin:0 0 24px; }
+  button { width:100%; height:48px; border:0; border-radius:14px; background:var(--brand); color:var(--brand-fg);
+           font:inherit; font-size:15px; font-weight:700; transition:scale .15s; }
+  button:active { scale:.97; }
+  @keyframes rise { from { opacity:0; transform:translateY(12px); } }
+  @media (prefers-reduced-motion: reduce) { .card { animation:none; } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="dot">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><path d="M12 19.5h.01"/><path d="M3 3l18 18"/>
+      </svg>
+    </div>
+    <h1>اتصال به یکاری برقرار نشد</h1>
+    <p>اینترنت گوشی را بررسی کن. به‌محض وصل‌شدن، خودکار دوباره تلاش می‌کنیم.</p>
+    <button id="retry" type="button">تلاش دوباره</button>
+  </div>
+<script>
+  // آدرسی که باز نشد بعد از # می‌آید؛ برگشت با replace تا این صفحه در تاریخچه نماند
+  var target = decodeURIComponent(location.hash.slice(1));
+  function retry() { if (target) location.replace(target); }
+  document.getElementById('retry').addEventListener('click', retry);
+  window.addEventListener('online', retry);
+</script>
+</body>
+</html>
