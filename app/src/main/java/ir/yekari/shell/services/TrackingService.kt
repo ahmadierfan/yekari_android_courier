@@ -1,4 +1,4 @@
-package ir.yekari.shell.tracking
+package ir.yekari.shell.services
 
 import android.Manifest
 import android.app.Service
@@ -21,7 +21,7 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import ir.yekari.shell.Hosts
 import ir.yekari.shell.MainActivity
-import ir.yekari.shell.Notifier
+import ir.yekari.shell.notifications.Notifier
 import ir.yekari.shell.R
 import org.json.JSONObject
 import java.io.IOException

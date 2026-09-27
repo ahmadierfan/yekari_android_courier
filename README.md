@@ -4,7 +4,14 @@
 Nuxt) را تمام‌صفحه در WebView باز می‌کند و هرچه وب‌ویو خودش ندارد را پر می‌کند.
 هم‌زاد این ریپو [`yekari_android_customer`](https://github.com/ahmadierfan/yekari_android_customer) است؛
 کد `ir.yekari.shell` در هر دو یکی است و فقط `app/build.gradle.kts` (بالای فایل)، `AppFeatures.kt`
-و منابع رنگ/متن فرق دارند، به‌علاوهٔ پوشهٔ `tracking/` که فقط این‌جاست.
+و منابع رنگ/متن فرق دارند، به‌علاوهٔ پوشهٔ `services/` که فقط این‌جاست.
+
+الگوها از اپ نمونهٔ [`homeease_android`](https://github.com/ahmadierfan/homeease_android) گرفته شده‌اند:
+ساختار پوشه‌ها (`services/`، `notifications/`، `utils/`)، انتخابگر فایل دوربین + گالری با FileProvider،
+«دو بار برگشت برای خروج»، انتخابگر مسیریاب برای `geo:`، تشخیص گفتار فارسی، قفل عمودی، و در اپ پیک
+دیالوگ معافیت از بهینه‌سازی باتری + راهنمای Autostart سازنده‌ها (`OemAutostartHelper`).
+عمداً متفاوت: مجوزها همان لحظهٔ نیاز خواسته می‌شوند نه همه در شروع؛ `ACCESS_BACKGROUND_LOCATION`،
+FCM و MQTT فعلاً نیستند (بک‌اند یکاری هنوز push ندارد)؛ هیچ فایل `google-services.json` یا کلیدی در ریپو نیست.
 
 ## چه چیزی را پوشش می‌دهد
 
@@ -15,7 +22,7 @@ Nuxt) را تمام‌صفحه در WebView باز می‌کند و هرچه و�
 | آنلاین‌بودن وقتی اپ بسته است | سرویس پیش‌زمینه: ارسال موقعیت + اعلان پیشنهاد تازه (پایین‌تر) |
 | `getUserMedia` (پیام صوتی) | مجوز میکروفون |
 | `navigator.share`، `clipboard` | با پل بومی پر می‌شوند (وب‌ویو ندارد) |
-| `tel:`، `geo:`، `intent:`، نشان/گوگل‌مپ | در اپ مربوط باز می‌شوند |
+| `tel:`، `intent:`، نشان/گوگل‌مپ | در اپ مربوط باز می‌شوند؛ `geo:` با انتخابگر «انتخاب مسیریاب» (نشان، بلد، گوگل‌مپ) |
 | دکمهٔ برگشت | اول `window.__yekariBack?.()`، بعد تاریخچه، در صفحهٔ اول «دو بار برای خروج» |
 | قطع اینترنت / سرور خاموش | صفحهٔ «اتصال برقرار نشد» فارسی که با وصل‌شدن خودش برمی‌گردد |
 | تم تیره/روشن | رنگ نوار وضعیت و ناوبری از `--surface` صفحه و `data-theme` |
@@ -106,10 +113,11 @@ keytool -list -v -keystore release.jks | grep SHA256
 | `copy(text)` | کپی (پشت `navigator.clipboard.writeText`) |
 | `haptic(kind)` | لرزش کوتاه: `light` / `success` / `error` |
 | `permission(kind)` | `granted` / `prompt` / `unsupported` — `location`, `camera`, `microphone`, `notifications` |
-| `requestPermission(kind)` | جواب در رویداد `yekari:permission` با `detail: {kind, granted}` |
+| `requestPermission(kind)` | جواب در رویداد `yekari:permission`، `yekari:speech` با `detail: {kind, granted}` |
 | `notify(title, body, path)` | اعلان محلی؛ لمسش `path` را باز می‌کند |
 | `openSettings()` | تنظیمات اپ (وقتی مجوزی برای همیشه رد شده) |
 | `openExternal(url)` | باز کردن در اپ/مرورگر بیرونی |
+| `startSpeechRecognition()` | گفتار به متن فارسی؛ نتیجه در `yekari:speech` (`detail.text`) و `window.onSpeechResult(text)` |
 | `startTracking(json)` | روشن‌کردن سرویس آنلاین: `{apiBase, token, interval}`؛ جواب در `yekari:tracking` |
 | `stopTracking()` | خاموش‌کردن سرویس (آفلاین/خروج) |
 | `setBars(surface, dark)` | خودکار صدا زده می‌شود؛ لازم نیست وب‌اپ بداند |
@@ -120,7 +128,7 @@ keytool -list -v -keystore release.jks | grep SHA256
 وب‌اپ برای بستن شیت/مودال با دکمهٔ برگشت می‌تواند `window.__yekariBack = () => { … return true }`
 تعریف کند؛ `true` یعنی «خودم بستم، ناوبری نکن».
 
-## آنلاین در پس‌زمینه (`tracking/`)
+## آنلاین در پس‌زمینه (`services/`)
 
 وقتی پیک در وب‌اپ آنلاین می‌شود، `stores/courier.ts` (ریپوی `yekari_courier`، `utils/native.ts`)
 `startTracking` را صدا می‌زند؛ با آفلاین‌شدن یا خروج `stopTracking`. تا وقتی سرویس روشن است:
@@ -135,8 +143,9 @@ keytool -list -v -keystore release.jks | grep SHA256
 فقط مجوز موقعیت «هنگام استفاده» لازم است (سرویس وقتی اپ باز است روشن می‌شود)؛ `ACCESS_BACKGROUND_LOCATION`
 عمداً خواسته نمی‌شود. توکن فقط در حافظهٔ سرویس است و فقط به میزبان‌های `trustedHosts` فرستاده می‌شود.
 اگر اندروید اپ را کامل ببندد سرویس خودبه‌خود برنمی‌گردد (توکن ندارد)؛ با باز کردن دوبارهٔ اپ، وب‌اپ
-دوباره روشنش می‌کند. بعضی گوشی‌ها (شیائومی، هواوی، …) در «بهینه‌سازی باتری» سرویس را می‌کشند؛
-پیک باید یکاری را از آن مستثنا کند.
+دوباره روشنش می‌کند. اولین بار در هر اجرا که سرویس روشن می‌شود، اگر اپ از بهینه‌سازی باتری معاف
+نباشد دیالوگ معافیت و (یک بار برای همیشه) راهنمای Autostart شیائومی/هواوی/اوپو/… نشان داده می‌شود
+(`utils/BatteryGuide.kt`).
 
 ## هنوز نیست
 

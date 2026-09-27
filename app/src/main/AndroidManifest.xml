@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <!-- دیالوگ معافیت از بهینه‌سازی باتری (utils/BatteryGuide) -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
@@ -24,6 +26,28 @@
         <intent>
             <action android:name="android.media.action.IMAGE_CAPTURE" />
         </intent>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <!-- مسیریاب‌ها برای geo: -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <package android:name="org.neshan.maps" />
+        <package android:name="ir.balad.android" />
+        <package android:name="com.google.android.apps.maps" />
+        <!-- صفحه‌های Autostart سازنده‌ها (utils/OemAutostartHelper) — بدون این، اندروید ۱۱+ پیدایشان نمی‌کند -->
+        <package android:name="com.miui.securitycenter" />
+        <package android:name="com.huawei.systemmanager" />
+        <package android:name="com.coloros.safecenter" />
+        <package android:name="com.oppo.safe" />
+        <package android:name="com.vivo.permissionmanager" />
+        <package android:name="com.iqoo.secure" />
+        <package android:name="com.oneplus.security" />
+        <package android:name="com.samsung.android.lool" />
+        <package android:name="com.meizu.safe" />
+        <package android:name="com.asus.mobilemanager" />
     </queries>
 
     <application
@@ -40,7 +64,9 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|density"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,7 +83,7 @@
 
         <!-- وقتی پیک آنلاین است و اپ بسته/پشت است: موقعیت + اعلان پیشنهاد تازه -->
         <service
-            android:name=".tracking.TrackingService"
+            android:name=".services.TrackingService"
             android:exported="false"
             android:foregroundServiceType="location" />
 

@@ -3,8 +3,8 @@ package ir.yekari.shell
 import android.content.Context
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import ir.yekari.shell.tracking.CourierTracker
-import ir.yekari.shell.tracking.TrackingService
+import ir.yekari.shell.services.CourierTracker
+import ir.yekari.shell.services.TrackingService
 
 /** تفاوت رفتاری اپ پیک با اپ مشتری (بقیهٔ پوستهٔ بومی در دو ریپو یکی است) */
 object AppFeatures {

@@ -16,4 +16,14 @@
     <string name="offer_title">پیشنهاد مأموریت تازه</string>
     <string name="offer_body">برای دیدن جزئیات و پذیرش بزن</string>
     <string name="offer_body_left">برای دیدن جزئیات و پذیرش بزن — %1$s ثانیه فرصت</string>
+    <string name="pick_navigator">انتخاب مسیریاب</string>
+    <string name="speech_prompt">بگو، می‌نویسیم…</string>
+    <string name="speech_unavailable">تشخیص گفتار روی این گوشی در دسترس نیست</string>
+    <string name="ok">باشه</string>
+    <string name="later">بعداً</string>
+    <string name="open_settings">باز کردن تنظیمات</string>
+    <string name="battery_title">آنلاین ماندن مطمئن</string>
+    <string name="battery_body">برای این‌که وقتی اپ بسته است هم پیشنهاد مأموریت به‌موقع برسد و موقعیتت قطع نشود، یکاری باید از «بهینه‌سازی باتری» معاف شود. در صفحهٔ بعد «اجازه» را بزن.</string>
+    <string name="oem_title">یک تنظیم دیگر مخصوص گوشی تو</string>
+    <string name="oem_body">گوشی‌های %1$s علاوه بر تنظیمات معمول اندروید، محدودیت اختصاصی خودشان را دارند که ممکن است اپ را در پس‌زمینه ببندد. در صفحهٔ بعد «اجرای خودکار» (Autostart) یا «محافظت» را برای یکاری روشن کن.</string>
 </resources>

@@ -1,9 +1,10 @@
-package ir.yekari.shell.tracking
+package ir.yekari.shell.services
 
 import android.content.Context
 import ir.yekari.shell.Kind
 import ir.yekari.shell.MainActivity
 import ir.yekari.shell.Tracker
+import ir.yekari.shell.utils.BatteryGuide
 import org.json.JSONObject
 
 /**
@@ -16,6 +17,9 @@ import org.json.JSONObject
  * نتیجه با رویداد `yekari:tracking` — `detail: {running, reason?}` برمی‌گردد.
  */
 object CourierTracker : Tracker {
+    /** راهنمای باتری/Autostart هر بار اجرای اپ حداکثر یک بار (arm در هر صفحهٔ داشبورد صدا زده می‌شود) */
+    private var guided = false
+
     override fun start(activity: MainActivity, config: String) {
         activity.gate.request(Kind.LOCATION) { located ->
             if (!located) {
@@ -25,6 +29,10 @@ object CourierTracker : Tracker {
             // بدون اجازهٔ اعلان سرویس کار می‌کند، ولی پیشنهادِ پس‌زمینه دیده نمی‌شود
             activity.gate.request(Kind.NOTIFICATIONS) {
                 val started = runCatching { TrackingService.start(activity, config) }.isSuccess
+                if (started && !guided) {
+                    guided = true
+                    BatteryGuide.check(activity)
+                }
                 activity.emit(
                     "tracking",
                     JSONObject().put("running", started).apply { if (!started) put("reason", "service") },

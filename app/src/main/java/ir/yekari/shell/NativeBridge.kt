@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.webkit.JavascriptInterface
+import ir.yekari.shell.notifications.Notifier
 import org.json.JSONObject
 
 /**
@@ -98,6 +99,10 @@ class NativeBridge(private val activity: MainActivity) {
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", activity.packageName, null)),
         )
     }
+
+    /** گفتار به متن فارسی؛ نتیجه در رویداد `yekari:speech` (`detail.text`، خالی یعنی لغو) */
+    @JavascriptInterface
+    fun startSpeechRecognition() = ui { activity.startSpeech() }
 
     @JavascriptInterface
     fun openExternal(url: String) = ui { activity.openExternal(Uri.parse(url)) }

@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.os.SystemClock
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -31,11 +32,13 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import ir.yekari.shell.notifications.Notifier
 import org.json.JSONObject
 import kotlin.math.max
 
@@ -50,6 +53,17 @@ class MainActivity : ComponentActivity() {
     val gate = PermissionGate(this)
     private val picker = FilePicker(this)
     private val bridge = NativeBridge(this)
+
+    /** تشخیص گفتار فارسی (مثل HomeEase): متن در `yekari:speech` و `window.onSpeechResult` */
+    private val speech = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        val text = res.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull()
+            .takeIf { res.resultCode == RESULT_OK }
+            .orEmpty()
+        emit("speech", JSONObject().put("text", text))
+        if (text.isNotEmpty()) {
+            web.evaluateJavascript("window.onSpeechResult && window.onSpeechResult(${JSONObject.quote(text)})", null)
+        }
+    }
 
     private lateinit var root: FrameLayout
     private lateinit var web: WebView
@@ -198,6 +212,19 @@ class MainActivity : ComponentActivity() {
         web.performHapticFeedback(constant)
     }
 
+    fun startSpeech() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa-IR")
+            .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt))
+        try {
+            speech.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.speech_unavailable, Toast.LENGTH_SHORT).show()
+            emit("speech", JSONObject().put("text", ""))
+        }
+    }
+
     /** tel:, geo:, intent:, نشان، گوگل‌مپ، … — هرچه داخل اپ نمی‌ماند */
     fun openExternal(uri: Uri) {
         val intent = if (uri.scheme == "intent") {
@@ -209,6 +236,9 @@ class MainActivity : ComponentActivity() {
                     selector = null
                 }
             }.getOrNull() ?: return
+        } else if (uri.scheme == "geo") {
+            // مثل HomeEase: پیک خودش انتخاب کند نشان، بلد یا گوگل‌مپ
+            Intent.createChooser(Intent(Intent.ACTION_VIEW, uri), getString(R.string.pick_navigator))
         } else {
             Intent(Intent.ACTION_VIEW, uri)
         }

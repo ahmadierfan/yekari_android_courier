@@ -1,4 +1,4 @@
-package ir.yekari.shell
+package ir.yekari.shell.notifications
 
 import android.Manifest
 import android.app.PendingIntent
@@ -10,6 +10,10 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import ir.yekari.shell.AppFeatures
+import ir.yekari.shell.Links
+import ir.yekari.shell.MainActivity
+import ir.yekari.shell.R
 import java.util.concurrent.atomic.AtomicInteger
 
 /** اعلان‌های محلی. لمس هر اعلان اپ را روی مسیر وب مربوطش باز می‌کند. */
