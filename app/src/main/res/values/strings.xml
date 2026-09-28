@@ -21,6 +21,8 @@
     <string name="speech_unavailable">تشخیص گفتار روی این گوشی در دسترس نیست</string>
     <string name="ok">باشه</string>
     <string name="later">بعداً</string>
+    <string name="location_off">مکان‌یاب گوشی خاموش است. برای پیدا کردن موقعیتت روی نقشه، روشنش کن.</string>
+    <string name="location_blocked">دسترسی یکاری به موقعیت بسته شده. از تنظیمات اپ، بخش «مجوزها»، «موقعیت» را روشن کن.</string>
     <string name="open_settings">باز کردن تنظیمات</string>
     <string name="battery_title">آنلاین ماندن مطمئن</string>
     <string name="battery_body">برای این‌که وقتی اپ بسته است هم پیشنهاد مأموریت به‌موقع برسد و موقعیتت قطع نشود، یکاری باید از «بهینه‌سازی باتری» معاف شود. در صفحهٔ بعد «اجازه» را بزن.</string>
