@@ -86,6 +86,15 @@ class NativeBridge(private val activity: MainActivity) {
         activity.gate.request(k) { ok -> activity.emit("permission", JSONObject().put("kind", kind).put("granted", ok)) }
     }
 
+    /**
+     * موقعیت فعلی برای دکمهٔ «موقعیت من». مجوز را همین لحظه می‌خواهد و اگر مکان‌یاب خاموش یا
+     * مجوز برای همیشه رد شده باشد، راه تنظیمات را پیشنهاد می‌دهد. جواب در رویداد
+     * `yekari:location` — `detail: {id, ok: true, lat, lng, accuracy}` یا
+     * `{id, ok: false, error: denied | disabled | unavailable}`
+     */
+    @JavascriptInterface
+    fun getLocation(id: String) = ui { activity.locate(id) }
+
     /** اعلان محلی؛ لمسش اپ را روی `path` باز می‌کند */
     @JavascriptInterface
     fun notify(title: String, body: String, path: String?) = ui {

@@ -1,6 +1,7 @@
 package ir.yekari.shell
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.os.SystemClock
+import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.HapticFeedbackConstants
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
     val gate = PermissionGate(this)
     private val picker = FilePicker(this)
     private val bridge = NativeBridge(this)
+    private val location by lazy { CurrentLocation(this) }
 
     /** تشخیص گفتار فارسی (مثل HomeEase): متن در `yekari:speech` و `window.onSpeechResult` */
     private val speech = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
@@ -223,6 +226,50 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, R.string.speech_unavailable, Toast.LENGTH_SHORT).show()
             emit("speech", JSONObject().put("text", ""))
         }
+    }
+
+    /** `YekariAndroid.getLocation(id)` — جواب همیشه یک رویداد `yekari:location` با همان id */
+    fun locate(id: String) {
+        val reply = { detail: JSONObject -> emit("location", detail.put("id", id)) }
+        val fail = { error: String -> reply(JSONObject().put("ok", false).put("error", error)) }
+        gate.request(Kind.LOCATION) { granted ->
+            when {
+                !granted -> {
+                    // بعد از «دیگر نپرس» اندروید دیالوگی نشان نمی‌دهد؛ تنها راه، تنظیمات اپ است
+                    val blocked = Kind.LOCATION.permissions.none { shouldShowRequestPermissionRationale(it) }
+                    if (blocked) {
+                        offerSettings(
+                            R.string.location_blocked,
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)),
+                        )
+                    }
+                    fail("denied")
+                }
+                !location.enabled() -> {
+                    offerSettings(R.string.location_off, Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    fail("disabled")
+                }
+                else -> location.fetch { loc ->
+                    if (loc == null) {
+                        fail("unavailable")
+                    } else {
+                        reply(
+                            JSONObject().put("ok", true).put("lat", loc.latitude).put("lng", loc.longitude)
+                                .put("accuracy", loc.accuracy.toDouble()),
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun offerSettings(message: Int, intent: Intent) {
+        if (isFinishing) return
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(R.string.open_settings) { _, _ -> runCatching { startActivity(intent) } }
+            .setNegativeButton(R.string.later, null)
+            .show()
     }
 
     /** tel:, geo:, intent:, نشان، گوگل‌مپ، … — هرچه داخل اپ نمی‌ماند */

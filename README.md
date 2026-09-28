@@ -18,7 +18,7 @@ FCM و MQTT فعلاً نیستند (بک‌اند یکاری هنوز push ند
 | نیاز وب‌اپ | این‌جا |
 |---|---|
 | `<input type="file">` (فاکتور خرید، مدرک تحویل، مدارک احراز، عکس در چت) | انتخابگر دوربین + گالری؛ عکس دوربین تا ۲۰۴۸px کوچک و درست‌چرخانده می‌شود |
-| `navigator.geolocation` | مجوز موقعیت همان لحظه که صفحه می‌خواهد |
+| `navigator.geolocation` | مجوز موقعیت همان لحظه که صفحه می‌خواهد (دکمهٔ «موقعیت من» از `getLocation` پل استفاده می‌کند) |
 | آنلاین‌بودن وقتی اپ بسته است | سرویس پیش‌زمینه: ارسال موقعیت + اعلان پیشنهاد تازه (پایین‌تر) |
 | `getUserMedia` (پیام صوتی) | مجوز میکروفون |
 | `navigator.share`، `clipboard` | با پل بومی پر می‌شوند (وب‌ویو ندارد) |
@@ -114,6 +114,7 @@ keytool -list -v -keystore release.jks | grep SHA256
 | `haptic(kind)` | لرزش کوتاه: `light` / `success` / `error` |
 | `permission(kind)` | `granted` / `prompt` / `unsupported` — `location`, `camera`, `microphone`, `notifications` |
 | `requestPermission(kind)` | جواب در رویداد `yekari:permission`، `yekari:speech` با `detail: {kind, granted}` |
+| `getLocation(id)` | موقعیت فعلی از GPS/شبکهٔ گوشی (بدون سرویس گوگل)؛ مجوز را همان لحظه می‌خواهد، برای مکان‌یاب خاموش یا مجوز بسته‌شده دیالوگ تنظیمات نشان می‌دهد. جواب در `yekari:location`: `{id, ok, lat, lng, accuracy}` یا `{id, ok: false, error: denied\|disabled\|unavailable}` |
 | `notify(title, body, path)` | اعلان محلی؛ لمسش `path` را باز می‌کند |
 | `openSettings()` | تنظیمات اپ (وقتی مجوزی برای همیشه رد شده) |
 | `openExternal(url)` | باز کردن در اپ/مرورگر بیرونی |
